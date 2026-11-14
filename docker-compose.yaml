@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  swiggy:
+    image: swiggy:latest
+    container_name: swiggy
+    build:
+      context: .
+      dockerfile: dockerfile.dev
+    ports:
+      - "1234:1234"
+    volumes:
+      - /app/node_modules
+      - .:/app
+
