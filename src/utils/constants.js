@@ -14,3 +14,11 @@ export const PLAYSTORE_URL =
 
 export const APPSTORE_URL =
   "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/portal/m/app_store.png";
+
+// Swiggy Desktop Listing Live API URL (Bangalore coordinates)
+export const SWIGGY_API_URL =
+  "https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9715987&lng=77.5945627&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING";
+
+// Swiggy Live API URL via CORS Proxy (for local browser development without CORS errors)
+export const SWIGGY_CORS_PROXY_URL =
+  "https://corsproxy.io/?" + encodeURIComponent(SWIGGY_API_URL);

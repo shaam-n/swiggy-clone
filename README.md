@@ -136,10 +136,13 @@ If you prefer running standalone Docker commands:
   - Cloudinary Restaurant Image CDN Base URL (`CDN_URL`)
   - Official Google Play Store & Apple App Store badges
 
-### 4. Pixel-Perfect Header Component (`src/components/Header.jsx`)
+### 4. Pixel-Perfect Header with Live Geolocation (`src/components/Header.jsx`)
 - **Sticky Top Bar**: `sticky top-0 z-50` with elevation drop-shadow (`shadow-[0_15px_40px_-20px_rgba(40,44,63,0.15)]`).
 - **Brand Identity**: Authentic Swiggy logo with smooth scale interaction on hover.
-- **Location Selector**: Bold area indicator with black underline transitioning to Swiggy orange, truncated location text, and animated dropdown arrow.
+- **Dynamic Live Location**:
+  - Integrated native browser Geolocation API (`navigator.geolocation.getCurrentPosition`).
+  - Reverse geocodes coordinates via `api-bdc.io` to detect and display user's live area and city in real-time.
+  - Graceful error fallback to default coordinates if location permission is denied.
 - **Navigation Links**:
   - `Search` with magnifying glass icon
   - `Offer` with tag icon and custom orange `NEW` badge
@@ -147,7 +150,19 @@ If you prefer running standalone Docker commands:
   - `Sign in` with user icon
   - `Cart` with cart icon and live green count badge indicator
 
-### 5. Comprehensive Footer Component (`src/components/Footer.jsx`)
+### 5. Config-Driven RestaurantCard & Grid (`src/components/RestaurantCard.jsx`)
+- **Card Anatomy**:
+  - Rounded container with hover scale animation (`hover:scale-95`).
+  - Aspect-ratio image container with dark gradient overlay and promotional discount badge.
+  - Solid green star rating badge (`★`), delivery minutes, price for two, and truncated cuisines and locality.
+- **Dynamic List Rendering**: Transformed static card layout into a data-driven UI using JavaScript `.map()` with unique `key={restaurant.info.id}`.
+
+### 6. React Lifecycle, Hooks (`useState`, `useEffect`) & Live API
+- **Render Cycle Architecture**: Implemented `useEffect` for non-blocking asynchronous data fetching on initial component mount.
+- **CORS Resolution**: Handled browser Same-Origin Policy (SOP) restrictions using browser CORS extensions and proxies.
+- **API Response Handling**: Safely extracted deeply nested card structures from Swiggy's Live desktop API and reverse geocoding responses.
+
+### 7. Comprehensive Footer Component (`src/components/Footer.jsx`)
 - **App Download Banner**: Swiggy's `#f0f0f5` light grey banner featuring official Google Play and App Store badges with hover transitions.
 - **Main Directory (Dark Theme)**: Dark `#02060c` background with a 5-column responsive grid:
   - *Brand & Copyright*: Inverted white Swiggy logo with copyright notice.
@@ -156,7 +171,7 @@ If you prefer running standalone Docker commands:
   - *Cities Delivered*: Top metro list + custom `685 cities ▾` button.
   - *Social Links*: Vector SVG icons for LinkedIn, Twitter (X), Instagram, and Facebook.
 
-### 6. Sticky Footer Architecture Fix
+### 8. Sticky Footer Architecture Fix
 - Resolved the "floating footer" empty space issue on short pages by structuring `src/App.js` with:
   - `min-h-screen` + `flex flex-col` on the root container.
   - `flex-1` on the `<main>` Body container to stretch and push the footer to the bottom.
@@ -164,10 +179,14 @@ If you prefer running standalone Docker commands:
 ---
 
 ## 🎯 Next Steps
-- [ ] Build **`Body.jsx`**:
-  - Top search input bar & "Top Rated Restaurants" filter button.
-  - Restaurant cards grid layout (`RestaurantCard.jsx`).
-  - Shimmer UI loading placeholders.
+- [ ] Connect interactive search and filter bar in **`Body.jsx`**:
+  - Search input with two-way data binding.
+  - "Top Rated Restaurants" filter toggle.
+  - Shimmer UI loading placeholders during API fetch.
+- [ ] Add client-side routing with `react-router-dom`.
+- [ ] Implement Restaurant Menu page with accordion categories.
+- [ ] Add Redux Toolkit (`@reduxjs/toolkit`) for cart management.
+
 - [ ] Connect Swiggy Live API / mock restaurant data.
 - [ ] Add client-side routing with `react-router-dom`.
 - [ ] Implement Restaurant Menu page with accordion categories.
