@@ -118,6 +118,31 @@ If you prefer running standalone Docker commands:
 
 ---
 
+## 🌐 API Architecture & CORS Strategy (Development vs. Production)
+
+Because Swiggy's listing endpoints are internal and do not provide public `Access-Control-Allow-Origin` headers, browsers block direct cross-origin calls (`fetch`) due to the **Same-Origin Policy (SOP)**. 
+
+Since **CORS is strictly a browser-enforced security boundary**, servers talking to servers never encounter CORS. Below is the architectural breakdown for resolving this in development and production:
+
+### 1. Local Development Strategies
+* **Browser CORS Extension** (Fastest for prototyping):
+  * Tools like *"Allow CORS: Access-Control-Allow-Origin"* or *"CORS Unblock"* strip CORS restrictions locally in Chrome.
+* **Parcel Reverse Proxy (`.proxyrc.js`)** (No extension required):
+  * Utilizes `http-proxy-middleware` inside Parcel's dev server to forward requests from `http://localhost:1234/api` to `https://www.swiggy.com` on the backend (Node $\rightarrow$ Swiggy).
+
+### 2. Production-Grade Architectures
+In production, compiled static bundles (`dist/`) do not run a Parcel server, and end users cannot be asked to install extensions. The following patterns ensure enterprise-grade stability:
+
+* **🏆 Serverless Edge Function / BFF (Backend-For-Frontend)**:
+  * Deploy a lightweight Edge function (e.g., **Cloudflare Worker** or **Vercel Serverless Function**) that acts as a secure API gateway.
+  * The edge worker receives client requests, fetches Swiggy server-to-server with genuine `User-Agent` headers, and returns the response with clean CORS headers across global edge nodes in <10ms.
+* **🐳 Containerized Nginx Reverse Proxy (Docker)**:
+  * In container deployments via `docker-compose`, Nginx serves the compiled production build and proxies `/api/*` traffic upstream to Swiggy.
+* **🛡️ Resilient Fallback Pattern (High Availability)**:
+  * External APIs can change schemas, rate-limit, or suffer downtime. The frontend implements graceful degradation: if the live network call fails or is blocked, it automatically falls back to `MOCK_RESTAURANTS` inside `catch`, ensuring the UI never presents a broken, blank screen.
+
+---
+
 ## 📌 Milestones Completed So Far
 
 ### 1. Tooling & Environment Setup
@@ -187,7 +212,3 @@ If you prefer running standalone Docker commands:
 - [ ] Implement Restaurant Menu page with accordion categories.
 - [ ] Add Redux Toolkit (`@reduxjs/toolkit`) for cart management.
 
-- [ ] Connect Swiggy Live API / mock restaurant data.
-- [ ] Add client-side routing with `react-router-dom`.
-- [ ] Implement Restaurant Menu page with accordion categories.
-- [ ] Add Redux Toolkit (`@reduxjs/toolkit`) for cart management.
