@@ -187,7 +187,18 @@ In production, compiled static bundles (`dist/`) do not run a Parcel server, and
 - **CORS Resolution**: Handled browser Same-Origin Policy (SOP) restrictions using browser CORS extensions and proxies.
 - **API Response Handling**: Safely extracted deeply nested card structures from Swiggy's Live desktop API and reverse geocoding responses.
 
-### 7. Comprehensive Footer Component (`src/components/Footer.jsx`)
+### 7. Interactive Real-Time Search & Rating Filters (`src/components/Body.jsx`)
+- **Two-State Architecture Pattern**:
+  - Dual state management using `restaurantList` (master list from API) and `filteredList` (active display list) to ensure filtered searches never permanently overwrite master data.
+- **Live Keystroke Search**:
+  - Controlled search input with real-time filtering on every keystroke.
+  - Automatic restoration of all cards when the search text is deleted/cleared.
+  - Solved the **React Asynchronous State Trap** by passing fresh event values (`e.target.value`) directly into the filtering logic instead of stale state variables.
+- **Quick Action Filters**:
+  - **Top Rated Filter**: Dynamically filters restaurants with `avgRating >= 4.5`.
+  - **Reset Action**: Instantly restores the full master list.
+
+### 8. Comprehensive Footer Component (`src/components/Footer.jsx`)
 - **App Download Banner**: Swiggy's `#f0f0f5` light grey banner featuring official Google Play and App Store badges with hover transitions.
 - **Main Directory (Dark Theme)**: Dark `#02060c` background with a 5-column responsive grid:
   - *Brand & Copyright*: Inverted white Swiggy logo with copyright notice.
@@ -196,7 +207,7 @@ In production, compiled static bundles (`dist/`) do not run a Parcel server, and
   - *Cities Delivered*: Top metro list + custom `685 cities ▾` button.
   - *Social Links*: Vector SVG icons for LinkedIn, Twitter (X), Instagram, and Facebook.
 
-### 8. Sticky Footer Architecture Fix
+### 9. Sticky Footer Architecture Fix
 - Resolved the "floating footer" empty space issue on short pages by structuring `src/App.js` with:
   - `min-h-screen` + `flex flex-col` on the root container.
   - `flex-1` on the `<main>` Body container to stretch and push the footer to the bottom.
@@ -204,11 +215,9 @@ In production, compiled static bundles (`dist/`) do not run a Parcel server, and
 ---
 
 ## 🎯 Next Steps
-- [ ] Connect interactive search and filter bar in **`Body.jsx`**:
-  - Search input with two-way data binding.
-  - "Top Rated Restaurants" filter toggle.
-  - Shimmer UI loading placeholders during API fetch.
-- [ ] Add client-side routing with `react-router-dom`.
-- [ ] Implement Restaurant Menu page with accordion categories.
-- [ ] Add Redux Toolkit (`@reduxjs/toolkit`) for cart management.
+- [ ] Implement **Shimmer UI** loading placeholder cards for conditional rendering during API fetch.
+- [ ] Add client-side routing with `react-router-dom` (`/about`, `/contact`, `/restaurants/:resId`).
+- [ ] Implement Restaurant Menu page with collapsible category accordions.
+- [ ] Add Redux Toolkit (`@reduxjs/toolkit`) for shopping cart management.
+
 
